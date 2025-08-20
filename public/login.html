@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Loop Estudos</title>
+<style>
+  /* Fundo e corpo */
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #1e1e1e; /* fundo escuro */
+    color: #e0e0e0;
+    margin: 0;
+  }
+
+  /* Container do formulário */
+  .container {
+    background: #2b2b2b; /* container levemente mais claro */
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  h2 {
+    text-align: center;
+    margin: 0 0 15px 0;
+    color: #ffffff;
+  }
+
+  /* Inputs */
+  input {
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #1e1e1e;
+    color: #e0e0e0;
+    font-size: 14px;
+  }
+
+  input::placeholder {
+    color: #888;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 5px #4caf50;
+  }
+
+  /* Botão */
+  button {
+    padding: 12px;
+    border: none;
+    background: #4caf50;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background: #45a049;
+  }
+
+  /* Switch de formulário */
+  .switch {
+    text-align: center;
+    font-size: 14px;
+    color: #aaa;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.2s;
+  }
+
+  .switch:hover {
+    color: #ffffff;
+  }
+
+  /* Mensagem de erro */
+  #message {
+    text-align: center;
+    font-size: 13px;
+    color: #ff6b6b;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="formTitle">Login</h2>
+    <input type="text" id="username" placeholder="Usuário" />
+    <input type="password" id="password" placeholder="Senha" />
+    <button id="submitBtn">Entrar</button>
+    <div class="switch" id="switchForm">Ainda não tem conta? Registrar</div>
+    <div id="message"></div>
+  </div>
+
+<script src="login.js"></script>
+</body>
+</html>
