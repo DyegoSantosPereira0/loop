@@ -29,7 +29,7 @@ submitBtn.addEventListener('click', async () => {
       const data = await res.json();
       if(res.ok){
         localStorage.setItem('token', data.token);
-        window.location.href = '/dashboard';
+        window.location.href = '/index.html';
       } else {
         messageDiv.textContent = data.message || 'Erro no login';
       }
