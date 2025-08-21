@@ -19,12 +19,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ===== MONGODB =====
 const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://userLoop:Dy15987123@cluster0.l8la7tw.mongodb.net/loop_estudos?retryWrites=true&w=majority';
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB conectado'))
-.catch(err => console.log('Erro MongoDB:', err));
+
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('MongoDB conectado'))
+  .catch(err => console.log('Erro MongoDB:', err));
 
 // ===== SCHEMAS =====
 const usuarioSchema = new mongoose.Schema({
@@ -56,11 +54,11 @@ const Historico = mongoose.model('Historico', historicoSchema);
 // ===== JWT MIDDLEWARE =====
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  if(!authHeader) return res.status(401).json({ message: 'Token não fornecido' });
+  if (!authHeader) return res.status(401).json({ message: 'Token não fornecido' });
 
   const token = authHeader.split(' ')[1];
   jwt.verify(token, JWT_SECRET, (err, user) => {
-    if(err) return res.status(403).json({ message: 'Token inválido' });
+    if (err) return res.status(403).json({ message: 'Token inválido' });
     req.user = user;
     next();
   });
@@ -78,10 +76,10 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const user = await Usuario.findOne({ username });
-  if(!user) return res.status(400).json({ message: 'Usuário não encontrado' });
+  if (!user) return res.status(400).json({ message: 'Usuário não encontrado' });
 
   const valido = await bcrypt.compare(password, user.password);
-  if(!valido) return res.status(400).json({ message: 'Senha incorreta' });
+  if (!valido) return res.status(400).json({ message: 'Senha incorreta' });
 
   const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET);
   res.json({ token });
@@ -113,7 +111,7 @@ app.put('/materias/:id', authMiddleware, async (req, res) => {
 app.delete('/materias/:id', authMiddleware, async (req, res) => {
   try {
     const materia = await Materia.findOne({ _id: req.params.id, userId: req.user.id });
-    if(!materia) return res.status(404).json({ message: 'Matéria não encontrada' });
+    if (!materia) return res.status(404).json({ message: 'Matéria não encontrada' });
 
     await Historico.deleteMany({ userId: req.user.id, materia: materia.nome });
     await Materia.deleteOne({ _id: req.params.id, userId: req.user.id });
@@ -141,7 +139,7 @@ app.get('/historico', authMiddleware, async (req, res) => {
 app.post('/materias/:id/revisoes', authMiddleware, async (req, res) => {
   const { datas } = req.body;
   const materia = await Materia.findOne({ _id: req.params.id, userId: req.user.id });
-  if(!materia) return res.status(404).json({ message: 'Matéria não encontrada' });
+  if (!materia) return res.status(404).json({ message: 'Matéria não encontrada' });
 
   materia.revisoes.push(...datas.map(d => new Date(d)));
   await materia.save();
@@ -150,17 +148,17 @@ app.post('/materias/:id/revisoes', authMiddleware, async (req, res) => {
 
 app.get('/materias/:id/revisoes', authMiddleware, async (req, res) => {
   const materia = await Materia.findOne({ _id: req.params.id, userId: req.user.id });
-  if(!materia) return res.status(404).json({ message: 'Matéria não encontrada' });
+  if (!materia) return res.status(404).json({ message: 'Matéria não encontrada' });
   res.json(materia.revisoes);
 });
 
 // ===== ROTAS DE PÁGINAS =====
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+  res.sendFile(path.resolve(__dirname, 'public', 'login.html'));
 });
 
 app.get('/dashboard', authMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
 // ===== INICIAR SERVIDOR =====
